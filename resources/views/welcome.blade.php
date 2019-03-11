@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel项目初始化
+                    Laravel
                 </div>
 
                 <div class="links">
