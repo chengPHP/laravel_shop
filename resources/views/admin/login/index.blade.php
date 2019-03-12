@@ -1,69 +1,71 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+<head>
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('admin.login') }}">
-                        {{ csrf_field() }}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+    <title>登录页 {{config("program.title")}}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('home/images/laozhang_avatar.png')}}">
+    <link href="{{asset('admin/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+    <link href="{{asset('admin/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+</head>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+<body class="gray-bg">
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name" style="font-size: 130px;padding-bottom: 80px;" >EDU</h1>
+        </div>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+        <form class="form-horizontal m-t" role="form" method="POST" action="{{ route('admin.login') }}">
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+            {{ csrf_field() }}
 
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                <div class="col-md-12">
+                    <input type="text" class="form-control" name="email" placeholder="邮箱" value="{{ old('email') }}" required autofocus>
+                    @if ($errors->has('email'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
                 </div>
             </div>
-        </div>
+            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                <div class="col-md-12">
+                    <input type="password" class="form-control" name="password" placeholder="密码" required>
+                    @if ($errors->has('password'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary block full-width m-b">登录</button>
+            <a class="btn btn-sm btn-white btn-block" href="">注册一个新用户</a>
+        </form>
+        <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
     </div>
 </div>
-@endsection
+
+<!-- Mainly scripts -->
+<script src="{{asset('admin/js/jquery-3.1.1.min.js')}}"></script>
+<script src="{{asset('admin/js/bootstrap.min.js')}}"></script>
+<script>
+
+    function updateImg() {
+        $("#captcha").attr("src",'/captcha/default?'+Math.random());
+    }
+
+</script>
+</body>
+
+</html>

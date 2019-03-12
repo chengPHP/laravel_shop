@@ -179,6 +179,8 @@ return [
 
         //Debugbar
         Barryvdh\Debugbar\ServiceProvider::class,
+        //菜单高亮
+        HieuLe\Active\ActiveServiceProvider::class,
 
     ],
 
@@ -231,6 +233,8 @@ return [
 
         //Debugbar
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        //菜单高亮
+        'Active' => HieuLe\Active\Facades\Active::class,
 
     ],
 

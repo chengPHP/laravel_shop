@@ -1,0 +1,19 @@
+/*
+author:程传民
+ */
+
+/*
+后台表格修改，删除icon的大小
+ */
+
+.table-operation-icon{
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+.select2-close-mask{
+    z-index: 2099;
+}
+.select2-dropdown{
+    z-index: 3051;
+}
