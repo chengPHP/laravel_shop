@@ -177,6 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Spatie\Permission\PermissionServiceProvider::class,
+
         //Debugbar
         Barryvdh\Debugbar\ServiceProvider::class,
         //菜单高亮
