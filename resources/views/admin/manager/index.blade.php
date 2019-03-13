@@ -4,7 +4,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
             <h2>个人博客后台</h2>
-            {{--{!! Breadcrumbs::render('user'); !!}--}}
+            {{--{!! Breadcrumbs::render('manager'); !!}--}}
         </div>
     </div>
 
@@ -33,7 +33,7 @@
                                 <tr>
                                     <th><input class="icheck_input_all" type="checkbox"></th>
                                     <th>id</th>
-                                    {{--<th>状态</th>--}}
+                                    <th>状态</th>
                                     <th>姓名</th>
                                     <th>手机号</th>
                                     <th>邮箱</th>
@@ -45,13 +45,13 @@
                                     <tr>
                                         <td><input class="icheck_input" type="checkbox" value="{{$v['id']}}"></td>
                                         <td>{{$v['id']}}</td>
-                                        {{--<td>
+                                        <td>
                                             @if($v['status']==0)
-                                                禁用
+                                                <span class="label label-danger">禁用</span>
                                             @else
-                                                启用
+                                                <span class="label label-info">启用</span>
                                             @endif
-                                        </td>--}}
+                                        </td>
                                         <td>{{$v['name']}}</td>
                                         <td>{{$v['phone']?$v['phone']:'暂无'}}</td>
                                         <td>{{$v['email']}}</td>
@@ -94,7 +94,7 @@
         function add() {
             $(".bs-example-modal-md .modal-content").html();
             $.ajax({
-                url: "{{ url('admin/user/create') }}",
+                url: "{{ url('admin/manager/create') }}",
                 type: 'GET',
                 dataType: 'HTML',
                 cache:false,
@@ -169,7 +169,7 @@
 
 
         function deleteUser(id) {
-            deleteItems(id,"{{url('admin/user')}}","确定删除该用户吗？");
+            deleteItems(id,"{{url('admin/manager')}}","确定删除该用户吗？");
         }
 
         function delUsers() {
@@ -180,7 +180,7 @@
                     ids.push(v.value);
                 });
                 ids = ids.toString();
-                deleteItems(ids,"{{url('admin/user')}}","确定删除这些用户吗？");
+                deleteItems(ids,"{{url('admin/manager')}}","确定删除这些用户吗？");
 
             }else{
                 swal("请选择至少一条数据！", "", "warning");
@@ -189,7 +189,7 @@
         }
 
         $("#simple-search").on('click',function () {
-            window.location.href = "{{url('admin/user')}}?search="+$("#search-text").val();
+            window.location.href = "{{url('admin/manager')}}?search="+$("#search-text").val();
         });
 
 

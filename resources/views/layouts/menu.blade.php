@@ -1,7 +1,9 @@
 {{--菜单栏--}}
+{{--@can('admin index')--}}
 <li class="{{ active_class(if_uri_pattern('admin/index')) }}">
     <a href="{{url('admin/index')}}"><i class="fa fa-desktop"></i> <span class="nav-label">控制面板</span></a>
 </li>
+{{--@endcan--}}
 <li class="{{ active_class(if_uri_pattern('admin/manager*')) }}">
     <a href="{{url('admin/manager')}}"><i class="fa fa-desktop"></i> <span class="nav-label">后台用户管理</span></a>
 </li>

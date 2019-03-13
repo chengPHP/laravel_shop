@@ -96,7 +96,7 @@
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/user')}}",
+            url: "{{url('admin/manager')}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {
