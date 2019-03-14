@@ -121,7 +121,7 @@ class AdminController extends Controller
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->phone = $request->phone;
-        if($admin->password){
+        if($request->password != null){
             $admin->password = bcrypt($request->password);
         }
         $admin->status = $request->status;
