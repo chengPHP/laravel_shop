@@ -38,4 +38,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'],function ($router)
     Route::resource('role','RoleController');
     //权限管理
     Route::resource('permission','PermissionController');
+    //前台用户管理
+    Route::resource('user','UserController');
 });

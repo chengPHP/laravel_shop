@@ -1,29 +1,40 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">修改用户信息</h4>
+    <h4 class="modal-title">添加用户</h4>
 </div>
-<form method="post" class="form-horizontal" action="{{url('admin/manager')}}/{{$info->id}}">
+<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/user')}}">
     <div class="modal-body">
-        <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="_method" value="PUT">
+
+        {{--错误信息提示--}}
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{csrf_field()}}
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">姓名</label>
             <div class="col-sm-10">
-                <input id="name" type="text" name="name" value="{{$info->name}}" class="form-control">
+                <input id="name" type="text" name="name" value="" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
             <label for="phone" class="col-sm-2 control-label">手机号</label>
             <div class="col-sm-10">
-                <input id="phone" type="email" name="phone" value="{{$info->phone}}" class="form-control">
+                <input id="phone" type="text" name="phone" value="" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
             <label for="email" class="col-sm-2 control-label">邮箱</label>
             <div class="col-sm-10">
-                <input id="email" type="email" name="email" value="{{$info->email}}" class="form-control">
+                <input id="email" type="email" name="email" value="" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
@@ -31,7 +42,6 @@
             <label for="password" class="col-sm-2 control-label">密码</label>
             <div class="col-sm-10">
                 <input id="password" type="password" name="password" value="" class="form-control">
-                <span class="help-block dw-fontsize-8">* 密码为空，则不修改密码</span>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
@@ -43,23 +53,14 @@
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="role_id" class="col-sm-2 control-label">角色</label>
-            <div class="col-sm-10">
-                <select id="role_id" class="form-control m-b select2" multiple="multiple" name="role_id[]">
-                    {!! role_select($info->roles->pluck('id')->all(),0) !!}
-                </select>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
             <label class="col-sm-2 control-label">状态</label>
             <div class="col-sm-10">
                 <div class="radio radio-info radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" {{$info->status==1 ? 'checked': ''}}>
+                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" checked="">
                     <label for="inlineRadio1">启用 </label>
                 </div>
                 <div class="radio radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status" {{$info->status==0 ? 'checked': ''}}>
+                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status">
                     <label for="inlineRadio2">禁用 </label>
                 </div>
             </div>
@@ -70,7 +71,6 @@
         <button type="button" onclick="tijiao(this)" class="btn btn-primary">提交</button>
     </div>
 </form>
-
 <script type="text/javascript" >
     //页面加载完成后初始化select2控件
     $(document).ready(function() {
@@ -82,11 +82,12 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
+
     });
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/manager')}}/{{$info->id}}",
+            url: "{{url('admin/user')}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {

@@ -2,7 +2,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">修改用户信息</h4>
 </div>
-<form method="post" class="form-horizontal" action="{{url('admin/manager')}}/{{$info->id}}">
+<form method="post" class="form-horizontal" action="{{url('admin/user')}}/{{$info->id}}">
     <div class="modal-body">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="_method" value="PUT">
@@ -43,15 +43,6 @@
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="role_id" class="col-sm-2 control-label">角色</label>
-            <div class="col-sm-10">
-                <select id="role_id" class="form-control m-b select2" multiple="multiple" name="role_id[]">
-                    {!! role_select($info->roles->pluck('id')->all(),0) !!}
-                </select>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
             <label class="col-sm-2 control-label">状态</label>
             <div class="col-sm-10">
                 <div class="radio radio-info radio-inline">
@@ -86,7 +77,7 @@
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/manager')}}/{{$info->id}}",
+            url: "{{url('admin/user')}}/{{$info->id}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {
