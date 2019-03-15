@@ -2,7 +2,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">添加用户</h4>
 </div>
-<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/user')}}">
+<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/user')}}" enctype="multipart/form-data">
     <div class="modal-body">
 
         {{--错误信息提示--}}
@@ -74,6 +74,20 @@
                 </div>
             </div>
         </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="Comment" class="col-sm-2 control-label">头像</label>
+            <div class="col-sm-10">
+
+                <div id="uploader-demo">
+                    <!--用来存放item-->
+                    <img id="thumb_img" src="{{url('img/nopicture.jpg')}}" alt="" class="img-lg">
+                    <div id="fileList" class="uploader-list"></div>
+                    <div id="filePicker">选择图片</div>
+                </div>
+
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -91,6 +105,80 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
+
+
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: '{{ asset("admin/js/plugins/webuploader/Uploader.swf") }}',
+
+            // 文件接收服务端。
+            server: "{{ route('image.upload') }}",
+
+            formData: {
+                '_token':'{{ csrf_token() }}'
+            },
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on( 'uploadProgress', function( file, percentage ) {
+            /*var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress span');
+
+            // 避免重复创建
+            if ( !$percent.length ) {
+                $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+            }
+
+            $percent.css( 'width', percentage * 100 + '%' );*/
+        });
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+        uploader.on( 'uploadSuccess', function( file, response ) {
+            // $( '#'+file.id ).addClass('upload-state-done');
+            var img_path = response.ids.path;
+            $('#thumb_img').attr('src',"http://laravel_shop.me/"+img_path);
+            var id = response.ids.id;
+            // $('#uploader-demo').append('<input type="hidden" name="file_id" value="'+id+'">');
+            $('#uploader-demo').append('<input type="hidden" name="head_portrait" value="'+img_path+'">');
+        });
+
+        // 文件上传失败，显示上传出错。
+        uploader.on( 'uploadError', function( file ) {
+            var $li = $( '#'+file.id ),
+                $error = $li.find('div.error');
+
+            // 避免重复创建
+            if ( !$error.length ) {
+                $error = $('<div class="error"></div>').appendTo( $li );
+            }
+
+            $error.text('上传失败');
+        });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+        uploader.on( 'uploadComplete', function( file ) {
+            $( '#'+file.id ).find('.progress').remove();
+        });
+
+
 
     });
     function tijiao(obj) {

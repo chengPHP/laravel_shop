@@ -34,6 +34,7 @@
                                     <th><input class="icheck_input_all" type="checkbox"></th>
                                     <th>id</th>
                                     <th>状态</th>
+                                    <th>头像</th>
                                     <th>姓名</th>
                                     <th>手机号</th>
                                     <th>邮箱</th>
@@ -50,6 +51,15 @@
                                                 <span class="label label-danger">禁用</span>
                                             @else
                                                 <span class="label label-info">启用</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($v['head_portrait'])
+                                                <a href="{{url($v['head_portrait'])}}" data-lightbox="roadtrip">
+                                                    <image src="{{url($v['head_portrait'])}}" style="max-width: 50px;max-height: 50px;" ></image>
+                                                </a>
+                                            @else
+                                                暂无头像
                                             @endif
                                         </td>
                                         <td>{{$v['name']}}</td>

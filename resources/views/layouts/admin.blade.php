@@ -92,7 +92,11 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="{{asset('admin/img/profile_small.jpg')}}" />
+                            @if(auth('admin')->user()->head_portrait)
+                                <img alt="image" class="img-circle" src="{{asset(auth('admin')->user()->head_portrait)}}" style="max-height: 48px;max-width: 48px;"/>
+                            @else
+                                <img alt="image" class="img-circle" src="{{asset('admin/img/profile_small.jpg')}}" />
+                            @endif
                              </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ auth('admin')->user()->name }}</strong>

@@ -41,3 +41,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'],function ($router)
     //前台用户管理
     Route::resource('user','UserController');
 });
+
+//文件管理模块路由开始
+//-------------------------------------------------------------------------
+Route::group(['prefix' => 'file', 'namespace' => 'Admin'], function () {
+    Route::post('image_upload', 'FileController@imageUpload')->name('image.upload');
+    Route::post('file_upload', 'FileController@fileUpload')->name('file.upload');
+    Route::post('video_upload', 'FileController@videoUpload')->name('video.upload');
+});

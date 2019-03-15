@@ -61,6 +61,9 @@ class AdminController extends Controller
         $admin->phone = $request->phone;
         $admin->password = bcrypt($request->password);
         $admin->status = $request->status;
+        if($request->head_portrait){
+            $admin->head_portrait = $request->head_portrait;
+        }
         if($admin->save()){
             $admin_info = Admin::where('email', $request->email)->first();
             if(count($request->role_id) > 0){
@@ -125,6 +128,9 @@ class AdminController extends Controller
             $admin->password = bcrypt($request->password);
         }
         $admin->status = $request->status;
+        if($request->head_portrait){
+            $admin->head_portrait = $request->head_portrait;
+        }
         if($admin->save()){
             foreach ($admin->roles->pluck('name')->all() as $v){
                 $admin->removeRole($v);
