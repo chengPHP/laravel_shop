@@ -35,7 +35,7 @@
         <div class="form-group">
             <label for="phone" class="col-sm-2 control-label">SKU最低价格</label>
             <div class="col-sm-10">
-                <input id="price" type="text" name="price" value="{{$info->price}}" class="form-control">
+                <input id="price" type="text" name="price" value="{{$info->price}}" disabled class="form-control">
             </div>
         </div>
 

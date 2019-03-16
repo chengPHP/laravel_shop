@@ -46,9 +46,13 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->image = $request->image;
         $product->on_sale = $request->on_sale;
-        $product->price = $request->price;
+        //最低价格
+        if(count($request->SKU_title)>0) {
+            $product->price = min($request->SKU_price);
+        }else{
+            $product->price = 0;
+        }
 
-//        dd($request->SKU_title);
         if($product->save()){
             $product_id = $product->id;
             if(count($request->SKU_title)>0){
@@ -115,7 +119,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        dd($request->all());
         //先存储product
         $product = Product::where("id",$id)->with('skus')->first();
 
@@ -123,7 +126,13 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->image = $request->image;
         $product->on_sale = $request->on_sale;
-        $product->price = $request->price;
+
+        //最低价格
+        if(count($request->SKU_title)>0) {
+            $product->price = min($request->SKU_price);
+        }else{
+            $product->price = 0;
+        }
 
         if($product->save()){
             //首先对比出有无删减sku
