@@ -40,6 +40,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'],function ($router)
     Route::resource('permission','PermissionController');
     //前台用户管理
     Route::resource('user','UserController');
+    //商品管理
+    Route::resource('product','ProductController');
 });
 
 //文件管理模块路由开始

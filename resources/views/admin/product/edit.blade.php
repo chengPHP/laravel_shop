@@ -1,11 +1,11 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">添加用户</h4>
+    <h4 class="modal-title">修改商品信息</h4>
 </div>
-<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/manager')}}" enctype="multipart/form-data">
+<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/product')}}/{{$info->id}}" enctype="multipart/form-data">
     <div class="modal-body">
 
-        {{--错误信息提示--}}
+        错误信息提示
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -16,84 +16,101 @@
             </div>
         @endif
 
-        {{csrf_field()}}
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" name="_method" value="PUT">
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">姓名</label>
+            <label for="name" class="col-sm-2 control-label">商品名称</label>
             <div class="col-sm-10">
-                <input id="name" type="text" name="name" value="" class="form-control">
+                <input id="title" type="text" name="title" value="{{$info->title}}" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="phone" class="col-sm-2 control-label">手机号</label>
+            <label for="phone" class="col-sm-2 control-label">商品详情</label>
             <div class="col-sm-10">
-                <input id="phone" type="text" name="phone" value="" class="form-control">
+                <input id="description" type="text" name="description" value="{{$info->description}}" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">邮箱</label>
+            <label for="phone" class="col-sm-2 control-label">SKU最低价格</label>
             <div class="col-sm-10">
-                <input id="email" type="email" name="email" value="" class="form-control">
+                <input id="price" type="text" name="price" value="{{$info->price}}" class="form-control">
             </div>
         </div>
+
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="password" class="col-sm-2 control-label">密码</label>
-            <div class="col-sm-10">
-                <input id="password" type="password" name="password" value="" class="form-control">
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="repassword" class="col-sm-2 control-label">确认密码</label>
-            <div class="col-sm-10">
-                <input id="repassword" type="password" name="repassword" value="" class="form-control">
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="role_id" class="col-sm-2 control-label">角色</label>
-            <div class="col-sm-10">
-                <select id="role_id" class="form-control m-b select2" multiple="multiple" name="role_id[]">
-                    {!! role_select() !!}
-                </select>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">状态</label>
-            <div class="col-sm-10">
-                <div class="radio radio-info radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" checked="">
-                    <label for="inlineRadio1">启用 </label>
-                </div>
-                <div class="radio radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status">
-                    <label for="inlineRadio2">禁用 </label>
-                </div>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="Comment" class="col-sm-2 control-label">头像</label>
+            <label for="Comment" class="col-sm-2 control-label">商品图片</label>
             <div class="col-sm-10">
 
                 <div id="uploader-demo">
-                    <!--用来存放item-->
-                    <img id="thumb_img" src="{{url('img/nopicture.jpg')}}" alt="" class="img-lg">
+                    @if($info->image)
+                        <img id="thumb_img" src="{{url($info->image)}}" alt="" class="img-lg">
+                        <input type="hidden" name="image" value="{{$info->image}}">
+                    @else
+                        <img id="thumb_img" src="{{url('img/nopicture.jpg')}}" alt="" class="img-lg">
+                    @endif
+
                     <div id="fileList" class="uploader-list"></div>
                     <div id="filePicker">选择图片</div>
                 </div>
 
             </div>
         </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">售卖状态</label>
+            <div class="col-sm-10">
+                <div class="radio radio-info radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="on_sale" checked="">
+                    <label for="inlineRadio1">是 </label>
+                </div>
+                <div class="radio radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="on_sale">
+                    <label for="inlineRadio2">否 </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" >
+            <div class="col-md-12" >
+                <a href="javascript:;" class="add btn btn-md btn-success" >增加一栏</a>
+                <a href="javascript:;" class="reduce btn btn-md btn-danger" >减去指定栏</a>
+                <table class="table table-striped table-bordered SKU_table"  lay-filter="asset-table">
+                    <thead>
+                        <tr role="row">
+                            <td><input type="checkbox" id="checkAll"></td>
+                            <th>SKU名称<span style="color: red;" >*</span></th>
+                            <th>SKU描述<span style="color: red;" >*</span></th>
+                            <th>SKU价格<span style="color: red;" >*</span></th>
+                            <th>库存<span style="color: red;" >*</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($info->skus as $k=>$v)
+                            <tr>
+                                <td><input type="checkbox" name="checks"></td>
+                                <td><input type="hidden" name="SKU_id[{{$k}}]" value="{{$v->id}}"><input class="form-control" type="text" name="SKU_title[{{$k}}]" value="{{$v->title}}" data-error-container="#error-block" ></td>
+                                <td><input class="form-control" type="text" name="SKU_description[{{$k}}]" value="{{$v->description}}" data-error-container="#error-block" ></td>
+                                <td><input class="form-control" type="text" name="SKU_price[{{$k}}]" value="{{$v->price}}" data-error-container="#error-block" ></td>
+                                <td><input class="form-control" type="text" name="SKU_stock[{{$k}}]" value="{{$v->stock}}" data-error-container="#error-block" ></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="button" onclick="tijiao(this)" class="btn btn-primary">提交</button>
     </div>
 </form>
+
 <script type="text/javascript" >
     //页面加载完成后初始化select2控件
     $(document).ready(function() {
@@ -135,21 +152,6 @@
             }
         });
 
-        // 文件上传过程中创建进度条实时显示。
-        uploader.on( 'uploadProgress', function( file, percentage ) {
-            /*var $li = $( '#'+file.id ),
-                $percent = $li.find('.progress span');
-
-            // 避免重复创建
-            if ( !$percent.length ) {
-                $percent = $('<p class="progress"><span></span></p>')
-                    .appendTo( $li )
-                    .find('span');
-            }
-
-            $percent.css( 'width', percentage * 100 + '%' );*/
-        });
-
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on( 'uploadSuccess', function( file, response ) {
             // $( '#'+file.id ).addClass('upload-state-done');
@@ -157,7 +159,7 @@
             $('#thumb_img').attr('src',"http://laravel_shop.me/"+img_path);
             var id = response.ids.id;
             // $('#uploader-demo').append('<input type="hidden" name="file_id" value="'+id+'">');
-            $('#uploader-demo').append('<input type="hidden" name="head_portrait" value="'+img_path+'">');
+            $('#uploader-demo').append('<input type="hidden" name="image" value="'+img_path+'">');
         });
 
         // 文件上传失败，显示上传出错。
@@ -180,11 +182,33 @@
 
 
 
+        $(".add").click(function () {
+            $(".SKU_table tbody").append(
+                '<tr>' +
+                '<td><input type="checkbox" name="checks"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_title[]" data-error-container="#error-block"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_description[]" data-error-container="#error-block"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_price[]" data-error-container="#error-block"></td>'+
+                '<td><input class="form-control" type="text" name="SKU_stock[]" data-error-container="#error-block"></td>'+
+                '</tr>'
+            );
+            $('.datepicker').datepicker({
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                autoclose:true
+            });
+            $(".select2").select2();
+        });
+        $(".reduce").click(function () {
+            $(".table-bordered tbody tr input:checked").parents("tr").remove();
+        });
+
+
     });
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/manager')}}",
+            url: "{{url('admin/product')}}/{{$info->id}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {

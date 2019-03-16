@@ -1,8 +1,8 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">添加用户</h4>
+    <h4 class="modal-title">添加商品</h4>
 </div>
-<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/manager')}}" enctype="multipart/form-data">
+<form id="signupForm" method="post" class="form-horizontal" action="{{url('admin/product')}}" enctype="multipart/form-data">
     <div class="modal-body">
 
         {{--错误信息提示--}}
@@ -18,65 +18,29 @@
 
         {{csrf_field()}}
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">姓名</label>
+            <label for="name" class="col-sm-2 control-label">商品名称</label>
             <div class="col-sm-10">
-                <input id="name" type="text" name="name" value="" class="form-control">
+                <input id="title" type="text" name="title" value="" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="phone" class="col-sm-2 control-label">手机号</label>
+            <label for="phone" class="col-sm-2 control-label">商品详情</label>
             <div class="col-sm-10">
-                <input id="phone" type="text" name="phone" value="" class="form-control">
+                <input id="description" type="text" name="description" value="" class="form-control">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">邮箱</label>
+            <label for="phone" class="col-sm-2 control-label">SKU最低价格</label>
             <div class="col-sm-10">
-                <input id="email" type="email" name="email" value="" class="form-control">
+                <input id="price" type="text" name="price" value="" class="form-control">
             </div>
         </div>
+
         <div class="hr-line-dashed"></div>
         <div class="form-group">
-            <label for="password" class="col-sm-2 control-label">密码</label>
-            <div class="col-sm-10">
-                <input id="password" type="password" name="password" value="" class="form-control">
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="repassword" class="col-sm-2 control-label">确认密码</label>
-            <div class="col-sm-10">
-                <input id="repassword" type="password" name="repassword" value="" class="form-control">
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="role_id" class="col-sm-2 control-label">角色</label>
-            <div class="col-sm-10">
-                <select id="role_id" class="form-control m-b select2" multiple="multiple" name="role_id[]">
-                    {!! role_select() !!}
-                </select>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">状态</label>
-            <div class="col-sm-10">
-                <div class="radio radio-info radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="status" checked="">
-                    <label for="inlineRadio1">启用 </label>
-                </div>
-                <div class="radio radio-inline">
-                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="status">
-                    <label for="inlineRadio2">禁用 </label>
-                </div>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-        <div class="form-group">
-            <label for="Comment" class="col-sm-2 control-label">头像</label>
+            <label for="Comment" class="col-sm-2 control-label">商品图片</label>
             <div class="col-sm-10">
 
                 <div id="uploader-demo">
@@ -88,6 +52,50 @@
 
             </div>
         </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">售卖状态</label>
+            <div class="col-sm-10">
+                <div class="radio radio-info radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio1" value="1" name="on_sale" checked="">
+                    <label for="inlineRadio1">是 </label>
+                </div>
+                <div class="radio radio-inline">
+                    <input class="icheck_input" type="radio" id="inlineRadio2" value="0" name="on_sale">
+                    <label for="inlineRadio2">否 </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" >
+            <div class="col-md-12" >
+                <a href="javascript:;" class="add btn btn-md btn-success" >增加一栏</a>
+                <a href="javascript:;" class="reduce btn btn-md btn-danger" >减去指定栏</a>
+                <table class="table table-striped table-bordered SKU_table"  lay-filter="asset-table">
+                    <thead>
+                        <tr role="row">
+                            <td><input type="checkbox" id="checkAll"></td>
+                            <th>SKU名称<span style="color: red;" >*</span></th>
+                            <th>SKU描述<span style="color: red;" >*</span></th>
+                            <th>SKU价格<span style="color: red;" >*</span></th>
+                            <th>库存<span style="color: red;" >*</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr >
+                            <td><input type="checkbox" name="checks"></td>
+                            <td><input class="form-control" type="text" name="SKU_title[]" data-error-container="#error-block" ></td>
+                            <td><input class="form-control" type="text" name="SKU_description[]" data-error-container="#error-block" ></td>
+                            <td><input class="form-control" type="text" name="SKU_price[]" data-error-container="#error-block" ></td>
+                            <td><input class="form-control" type="text" name="SKU_stock[]" data-error-container="#error-block" ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -157,7 +165,7 @@
             $('#thumb_img').attr('src',"http://laravel_shop.me/"+img_path);
             var id = response.ids.id;
             // $('#uploader-demo').append('<input type="hidden" name="file_id" value="'+id+'">');
-            $('#uploader-demo').append('<input type="hidden" name="head_portrait" value="'+img_path+'">');
+            $('#uploader-demo').append('<input type="hidden" name="image" value="'+img_path+'">');
         });
 
         // 文件上传失败，显示上传出错。
@@ -180,11 +188,33 @@
 
 
 
+        $(".add").click(function () {
+            $(".SKU_table tbody").append(
+                '<tr>' +
+                '<td><input type="checkbox" name="checks"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_title[]" data-error-container="#error-block"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_description[]" data-error-container="#error-block"></td>' +
+                '<td><input class="form-control" type="text" name="SKU_price[]" data-error-container="#error-block"></td>'+
+                '<td><input class="form-control" type="text" name="SKU_stock[]" data-error-container="#error-block"></td>'+
+                '</tr>'
+            );
+            $('.datepicker').datepicker({
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                autoclose:true
+            });
+            $(".select2").select2();
+        });
+        $(".reduce").click(function () {
+            $(".table-bordered tbody tr input:checked").parents("tr").remove();
+        });
+
+
     });
     function tijiao(obj) {
         $.ajax({
             type: "post",
-            url: "{{url('admin/manager')}}",
+            url: "{{url('admin/product')}}",
             data: $('.form-horizontal').serialize(),
             dataType:"json",
             beforeSend:function () {

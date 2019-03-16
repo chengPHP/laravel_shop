@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('title')->comment('商品名称');
             $table->text('description')->comment('商品详情');
             $table->string('image')->comment('商品封面图片文件路径');
-            $table->boolean('on_sale')->default(true)->comment('商品是否正在售卖');
+            $table->tinyInteger('on_sale')->default(1)->comment('商品是否正在售卖 0|否 1|是');
             $table->float('rating')->default(5)->comment('商品平均评分');
             $table->unsignedInteger('sold_count')->default(0)->comment('销量');
             $table->unsignedInteger('review_count')->default(0)->comment('评价数量');
