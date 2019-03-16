@@ -16,6 +16,9 @@
 <li class="{{ active_class(if_uri_pattern('admin/user*')) }}">
     <a href="{{url('admin/user')}}"><i class="fa fa-users"></i> <span class="nav-label">前台用户管理</span></a>
 </li>
+<li class="{{ active_class(if_uri_pattern('admin/category*')) }}">
+    <a href="{{url('admin/category')}}"><i class="fa fa-users"></i> <span class="nav-label">商品类别管理</span></a>
+</li>
 <li class="{{ active_class(if_uri_pattern('admin/product*')) }}">
     <a href="{{url('admin/product')}}"><i class="fa fa-users"></i> <span class="nav-label">商品管理</span></a>
 </li>
