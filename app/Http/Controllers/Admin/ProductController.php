@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductSku;
 use Illuminate\Http\Request;
@@ -54,6 +55,18 @@ class ProductController extends Controller
         }
 
         if($product->save()){
+
+            //删除之前商品分类
+//            CategoryProduct::where('product_id',$product->id)->delete();
+
+            //关联商品分类
+            foreach (explode(',',$request->category_id) as $category_id){
+                $categoryProduct = new CategoryProduct();
+                $categoryProduct->category_id = $category_id;
+                $categoryProduct->product_id = $product->id;
+                $categoryProduct->save();
+            }
+
             $product_id = $product->id;
             if(count($request->SKU_title)>0){
                 foreach ($request->SKU_title as $k=>$v){
@@ -106,7 +119,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $info = Product::where("id",$id)->with('skus')->first();
+        $info = Product::where("id",$id)->with('skus','category')->first();
+        dd($info->category);
         return view('admin.product.edit',compact('info'));
     }
 
@@ -135,6 +149,18 @@ class ProductController extends Controller
         }
 
         if($product->save()){
+
+            //删除之前商品分类
+            CategoryProduct::where('product_id',$product->id)->delete();
+
+            //关联商品分类
+            foreach (explode(',',$request->category_id) as $category_id){
+                $categoryProduct = new CategoryProduct();
+                $categoryProduct->category_id = $category_id;
+                $categoryProduct->product_id = $product->id;
+                $categoryProduct->save();
+            }
+
             //首先对比出有无删减sku
             $old_skus_id = [];
             foreach ($product->skus as $v){

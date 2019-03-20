@@ -25,6 +25,15 @@
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group">
+            <label for="category_id" class="col-sm-2 control-label">所属类别</label>
+            <div class="col-sm-10">
+                <select id="category_id" class="form-control m-b select2" name="category_id">
+                    {!! category_select() !!}
+                </select>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
             <label for="phone" class="col-sm-2 control-label">商品详情</label>
             <div class="col-sm-10">
                 <input id="description" type="text" name="description" value="" class="form-control">

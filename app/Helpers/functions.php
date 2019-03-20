@@ -70,6 +70,58 @@ if (!function_exists('tree_to_list')) {
     }
 }
 
+/**
+ * 对查询结果集进行排序
+ * @access public
+ * @param array $list 查询结果
+ * @param string $field 排序的字段名
+ * @param array $sortby 排序类型
+ * asc正向排序 desc逆向排序 nat自然排序
+ * @return array
+ */
+if (!function_exists('list_sort_by')) {
+    function list_sort_by($list, $field, $sortby = 'asc')
+    {
+        if (is_array($list)) {
+            $refer = $resultSet = array();
+            foreach ($list as $i => $data)
+                $refer[$i] = &$data[$field];
+            switch ($sortby) {
+                case 'asc': // 正向排序
+                    asort($refer);
+                    break;
+                case 'desc':// 逆向排序
+                    arsort($refer);
+                    break;
+                case 'nat': // 自然排序
+                    natcasesort($refer);
+                    break;
+            }
+            foreach ($refer as $key => $val)
+                $resultSet[] = &$list[$key];
+            return $resultSet;
+        }
+        return false;
+    }
+}
+if (!function_exists('formatTreeData')) {
+    function formatTreeData($data, $id = "id", $parent_id = "parent_id", $root = 0, $space = '&nbsp;&nbsp;|--&nbsp;', $level = 0)
+    {
+        $arr = array();
+        if ($data) {
+            foreach ($data as $v) {
+                if ($v[$parent_id] == $root) {
+                    $v['level'] = $level + 1;
+                    $v['space'] = $root != 0 ? str_repeat($space, $level) : '' . str_repeat($space, $level);
+                    $arr[] = $v;
+                    $arr = array_merge($arr, formatTreeData($data, $id, $parent_id, $v[$id], $space, $level + 1));
+                }
+            }
+        }
+        return $arr;
+    }
+}
+
 
 /*
  * 获取随机验证码字符串
@@ -92,7 +144,8 @@ if (!function_exists('get_rand_str')) {
  *权限select框
  * */
 if (!function_exists('permission_select')) {
-    function permission_select($id = 0,$selected = 0, $type = 0)
+//    function permission_select($id = 0,$selected = [], $type = 0)
+    function permission_select($selected = [], $type = 0)
     {
         $list = Spatie\Permission\Models\Permission::getSpaceTreeData();
         if ($type == 1) {
@@ -104,8 +157,9 @@ if (!function_exists('permission_select')) {
         if ($list) {
             foreach ($list as $key => $val) {
                 $str .= '<option value="' . $val['id'] . '" '
-                    . ($id == $val['id'] ? 'disabled' : '')
-                    . ($selected == $val['id'] ? 'selected="selected"' : '') . '>'
+//                    . ($id == $val['id'] ? 'disabled' : '')
+//                    . ($selected == $val['id'] ? 'selected="selected"' : '') . '>'
+                    . (in_array($val['id'],$selected) ? 'selected="selected"' : '') . '>'
                     . $val['space'] . $val['display_name'] .'('. $val['name'] .')'. '</option>';
             }
         }
@@ -192,5 +246,36 @@ if(!function_exists("no_permission")){
         if(!\Illuminate\Support\Facades\Auth::user()->can(config('permissions.'.$permission))){
             return true;
         }
+    }
+}
+
+/*
+ * 商品类别select选择框
+ */
+if(!function_exists('category_select')){
+    function category_select($selected = '', $type = 1)
+    {
+        $list = App\Models\Category::where(['status'=>1])->get();
+
+        if ($type == 1) {
+            $str = '<option value="">请选择商品类别</option>';
+        } else {
+            $str = '';
+        }
+        if ($list) {
+            foreach ($list as $key => $val) {
+
+                if ($type) {
+                    $str .= '<option value="' . $val['id'] . '" '
+                        . ($selected == $val['id'] ? 'selected="selected"' : '') . '>'
+                        . $val['display_name'] . $val['name'] . '</option>';
+                } else {
+                    $str .= '<option value="' . $val['id'] . '" '
+                        . (in_array($val['id'], (array)$selected) ? 'selected="selected"' : '') . '>'
+                        . $val['display_name'] . $val['name'] . '</option>';
+                }
+            }
+        }
+        return $str;
     }
 }
