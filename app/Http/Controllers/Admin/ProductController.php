@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductSku;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class ProductController extends Controller
 {
@@ -41,7 +44,69 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //先存储product
+
+        //手动事务
+        DB::beginTransaction();
+        try{
+            //先存储product
+            $product_arr = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $request->image,
+                'on_sale' => $request->on_sale
+            ];
+            //最低价格
+            if(count($request->SKU_title)>0) {
+                $product_arr['price'] = min($request->SKU_price);
+            }else{
+                $product_arr['price'] = 0;
+            }
+
+            $product_id = DB::table('products')->insertGetId($product_arr);
+
+
+            //关联商品分类
+            foreach (explode(',',$request->category_id) as $category_id){
+                $arr1 = [
+                    'category_id' => $category_id,
+                    'product_id' => $product_id
+                ];
+                DB::table('category_product')->insert($arr1);
+            }
+
+            if(count($request->SKU_title)>0){
+                foreach ($request->SKU_title as $k=>$v){
+                    $arr2 = [
+                        'title' => $request->SKU_title[$k],
+                        'description' => $request->SKU_description[$k],
+                        'price' => $request->SKU_price[$k],
+                        'stock' => $request->SKU_stock[$k],
+                        'product_id' => $product_id
+                    ];
+                    $res = DB::table('product_skus')->insert($arr2);
+                }
+            }
+            DB::commit();
+        }catch (Exception $e){
+            DB::rollBack();
+            return "<script>alert('信息录入失败');history.back();</script>";
+        }
+
+        if($res){
+            $message = [
+                'code' => 1,
+                'message' => '商品添加成功'
+            ];
+
+        }else{
+            $message = [
+                'code' => 0,
+                'message' => '商品添加失败,请稍后重试'
+            ];
+        }
+        return response()->json($message);
+
+        /*//先存储product
         $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
@@ -55,9 +120,6 @@ class ProductController extends Controller
         }
 
         if($product->save()){
-
-            //删除之前商品分类
-//            CategoryProduct::where('product_id',$product->id)->delete();
 
             //关联商品分类
             foreach (explode(',',$request->category_id) as $category_id){
@@ -96,7 +158,7 @@ class ProductController extends Controller
                 'message' => '添加失败'
             ];
         }
-        return response()->json($message);
+        return response()->json($message);*/
     }
 
     /**
@@ -120,7 +182,6 @@ class ProductController extends Controller
     public function edit($id)
     {
         $info = Product::where("id",$id)->with('skus','category')->first();
-        dd($info->category);
         return view('admin.product.edit',compact('info'));
     }
 
